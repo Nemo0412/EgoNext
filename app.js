@@ -1,9 +1,13 @@
-const LAYOUT = {
-  ego: { left: 930 / 2554, width: 720 / 2554 },
-  vjepa: { left: 1770 / 2554, width: 720 / 2554 },
-  rowTop: [248, 333, 418, 503, 588].map((y) => y / 886),
-  rowHeight: 85 / 886,
-};
+function frameLayout(width, height, rowTops) {
+  return {
+    width,
+    height,
+    ego: { left: 930 / width, width: 720 / width },
+    vjepa: { left: 1770 / width, width: 720 / width },
+    rowTop: rowTops.map((y) => y / height),
+    rowHeight: 85 / height,
+  };
+}
 
 const EXAMPLES = [
   {
@@ -13,6 +17,7 @@ const EXAMPLES = [
     scene:
       "Open the fridge, open a drawer, take out the lettuce, open the package, close the fridge, and open the package.",
     video: "media/example1.mp4",
+    layout: frameLayout(2554, 886, [248, 333, 418, 503, 588]),
     marks: [
       {
         time: 8,
@@ -49,7 +54,19 @@ const EXAMPLES = [
   {
     id: "example-2",
     title: "Example 2",
-    pending: true,
+    heading: "Washing at the sink",
+    scene:
+      "Turn on the tap, pour water, wash, wash a plate, turn off the tap, and take the plate.",
+    video: "media/example2.mp4",
+    layout: frameLayout(2554, 864, [234, 319, 404, 489, 574]),
+    marks: [
+      { time: 8, action: "turn-on tap", ego: { rank: 3 }, vjepa: null },
+      { time: 23, action: "pour water", ego: { rank: 4 }, vjepa: { rank: 4 } },
+      { time: 30, action: "take liquid:washing", ego: { rank: 1 }, vjepa: null },
+      { time: 39, action: "wash plate", ego: { rank: 1 }, vjepa: { rank: 1 } },
+      { time: 43, action: "turn-off tap", ego: { rank: 2 }, vjepa: { rank: 4 } },
+      { time: 51, action: "take plate", ego: { rank: 4 }, vjepa: null },
+    ],
   },
   {
     id: "example-3",
@@ -118,7 +135,7 @@ function renderPlayer(example) {
     <h2>${example.heading}</h2>
     <p>${example.scene}</p>
     <div class="stage-scroll">
-      <div class="stage">
+        <div class="stage" style="aspect-ratio: ${example.layout.width} / ${example.layout.height}">
         <video id="player" src="${example.video}" preload="auto" playsinline></video>
         <div class="overlay" id="overlay"></div>
       </div>
@@ -181,15 +198,16 @@ function renderPlayer(example) {
   });
 
   function placeRing(modelKey, rank, label) {
-    const geom = LAYOUT[modelKey];
+    const layout = example.layout;
+    const geom = layout[modelKey];
     const ring = document.createElement("div");
     ring.className = `ring ${modelKey}`;
-    const padX = 8 / 2554;
-    const padY = 5 / 886;
+    const padX = 8 / layout.width;
+    const padY = 5 / layout.height;
     ring.style.left = `${(geom.left - padX) * 100}%`;
     ring.style.width = `${(geom.width + padX * 2) * 100}%`;
-    ring.style.top = `${(LAYOUT.rowTop[rank - 1] - padY) * 100}%`;
-    ring.style.height = `${(LAYOUT.rowHeight + padY * 2) * 100}%`;
+    ring.style.top = `${(layout.rowTop[rank - 1] - padY) * 100}%`;
+    ring.style.height = `${(layout.rowHeight + padY * 2) * 100}%`;
     const tag = document.createElement("span");
     tag.className = "ring-tag";
     tag.textContent = label;

@@ -3,7 +3,6 @@ function frameLayout(width, height, rowTops) {
     width,
     height,
     ego: { left: 930 / width, width: 720 / width },
-    vjepa: { left: 1770 / width, width: 720 / width },
     rowTop: rowTops.map((y) => y / height),
     rowHeight: 85 / height,
   };
@@ -17,38 +16,13 @@ const EXAMPLES = [
     scene:
       "Open the fridge, open a drawer, take out the lettuce, open the package, close the fridge, and open the package.",
     video: "media/example1.mp4",
-    layout: frameLayout(2554, 886, [248, 333, 418, 503, 588]),
+    layout: frameLayout(1700, 886, [248, 333, 418, 503, 588]),
     marks: [
-      {
-        time: 8,
-        action: "open fridge",
-        ego: { rank: 1 },
-        vjepa: { rank: 1 },
-      },
-      {
-        time: 15,
-        action: "open drawer",
-        ego: { rank: 1 },
-        vjepa: { rank: 3 },
-      },
-      {
-        time: 25,
-        action: "open package",
-        ego: { rank: 4 },
-        vjepa: null,
-      },
-      {
-        time: 46,
-        action: "close fridge",
-        ego: { rank: 3 },
-        vjepa: null,
-      },
-      {
-        time: 55,
-        action: "open package",
-        ego: { rank: 4 },
-        vjepa: { rank: 3 },
-      },
+      { time: 8, action: "open fridge", ego: { rank: 1 } },
+      { time: 15, action: "open drawer", ego: { rank: 1 } },
+      { time: 25, action: "open package", ego: { rank: 4 } },
+      { time: 46, action: "close fridge", ego: { rank: 3 } },
+      { time: 55, action: "open package", ego: { rank: 4 } },
     ],
   },
   {
@@ -58,14 +32,14 @@ const EXAMPLES = [
     scene:
       "Turn on the tap, pour water, wash, wash a plate, turn off the tap, and take the plate.",
     video: "media/example2.mp4",
-    layout: frameLayout(2554, 864, [234, 319, 404, 489, 574]),
+    layout: frameLayout(1700, 864, [234, 319, 404, 489, 574]),
     marks: [
-      { time: 8, action: "turn-on tap", ego: { rank: 3 }, vjepa: null },
-      { time: 23, action: "pour water", ego: { rank: 4 }, vjepa: { rank: 4 } },
-      { time: 30, action: "take liquid:washing", ego: { rank: 1 }, vjepa: null },
-      { time: 39, action: "wash plate", ego: { rank: 1 }, vjepa: { rank: 1 } },
-      { time: 43, action: "turn-off tap", ego: { rank: 2 }, vjepa: { rank: 4 } },
-      { time: 51, action: "take plate", ego: { rank: 4 }, vjepa: null },
+      { time: 8, action: "turn-on tap", ego: { rank: 3 } },
+      { time: 23, action: "pour water", ego: { rank: 4 } },
+      { time: 30, action: "take liquid:washing", ego: { rank: 1 } },
+      { time: 39, action: "wash plate", ego: { rank: 1 } },
+      { time: 43, action: "turn-off tap", ego: { rank: 2 } },
+      { time: 51, action: "take plate", ego: { rank: 4 } },
     ],
   },
   {
@@ -123,7 +97,7 @@ function renderPending(example) {
   main.innerHTML = "";
   const empty = document.createElement("section");
   empty.className = "empty";
-  empty.innerHTML = `<div><h2>${example.title}</h2><p>This clip will be added as the next example. Example 1 is ready to review.</p></div>`;
+  empty.innerHTML = `<div><h2>${example.title}</h2><p>This clip will be added as the next example.</p></div>`;
   main.appendChild(empty);
 }
 
@@ -154,7 +128,6 @@ function renderPlayer(example) {
     </div>
     <div class="legend">
       <span><i class="swatch ego"></i>EgoNext</span>
-      <span><i class="swatch vj"></i>V-JEPA 2.0</span>
     </div>
     <div class="moments">
       <h3>Checkpoints</h3>
@@ -191,7 +164,6 @@ function renderPlayer(example) {
       <span class="when">${formatTime(mark.time)}</span>
       <span class="action">${mark.action}</span>
       <span class="model ${mark.ego ? "hit" : "miss"}">EgoNext · ${rankLabel(mark.ego)}</span>
-      <span class="model ${mark.vjepa ? "hit" : "miss"}">V-JEPA 2.0 · ${rankLabel(mark.vjepa)}</span>
     `;
     row.addEventListener("click", () => hold(mark));
     momentList.appendChild(row);
@@ -248,11 +220,8 @@ function renderPlayer(example) {
       return;
     }
     if (mark.ego) placeRing("ego", mark.ego.rank, "EgoNext");
-    if (mark.vjepa) placeRing("vjepa", mark.vjepa.rank, "V-JEPA 2.0");
     captionTitle.textContent = `${formatTime(mark.time)}  ${mark.action}`;
-    const egoText = mark.ego ? `EgoNext rank ${mark.ego.rank}` : "EgoNext missed";
-    const vjText = mark.vjepa ? `V-JEPA 2.0 rank ${mark.vjepa.rank}` : "V-JEPA 2.0 does not predict it";
-    captionDetail.textContent = `${egoText} · ${vjText}`;
+    captionDetail.textContent = mark.ego ? `EgoNext rank ${mark.ego.rank}` : "EgoNext missed";
   }
 
   function syncChrome() {

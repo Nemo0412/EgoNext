@@ -6,8 +6,6 @@
   --muted: #a39c8e;
   --ego: #c8ff3d;
   --ego-ink: #10261b;
-  --vj: #f0a202;
-  --vj-ink: #2a1c00;
   --miss: #8f897e;
   --shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
   color-scheme: dark;
@@ -160,8 +158,6 @@ h1 span {
   border-width: 6px;
   background: rgba(214, 255, 74, 0.34);
 }
-.ring.vjepa { --ring: var(--vj); }
-
 .ring-tag {
   position: absolute;
   left: 10px;
@@ -287,7 +283,6 @@ h1 span {
 }
 
 .swatch.ego { background: var(--ego); }
-.swatch.vj { background: var(--vj); }
 
 .moments { margin-top: 22px; }
 
@@ -303,7 +298,7 @@ h1 span {
 .moment {
   width: 100%;
   display: grid;
-  grid-template-columns: 64px 1.1fr 1fr 1fr;
+  grid-template-columns: 64px 1.4fr auto;
   gap: 12px;
   align-items: center;
   text-align: left;

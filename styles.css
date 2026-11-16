@@ -136,9 +136,13 @@ h1 span {
   display: block;
   object-fit: fill;
   background: #000;
+  z-index: 1;
 }
 
-.overlay { pointer-events: none; }
+.overlay {
+  pointer-events: none;
+  z-index: 2;
+}
 
 .ring {
   position: absolute;
@@ -151,7 +155,11 @@ h1 span {
     0 0 24px color-mix(in srgb, var(--ring) 90%, transparent);
 }
 
-.ring.ego { --ring: #d6ff4a; }
+.ring.ego {
+  --ring: #d6ff4a;
+  border-width: 6px;
+  background: rgba(214, 255, 74, 0.34);
+}
 .ring.vjepa { --ring: var(--vj); }
 
 .ring-tag {

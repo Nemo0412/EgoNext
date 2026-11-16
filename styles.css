@@ -203,14 +203,20 @@ h1 span {
 }
 
 .play {
-  width: 46px;
+  width: 76px;
   height: 46px;
-  border-radius: 50%;
+  border-radius: 999px;
   border: 0;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: var(--text);
   color: #16140f;
   font: inherit;
+  font-size: 15px;
   font-weight: 700;
+  line-height: 1;
   cursor: pointer;
 }
 

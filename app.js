@@ -45,7 +45,19 @@ const EXAMPLES = [
   {
     id: "example-3",
     title: "Example 3",
-    pending: true,
+    heading: "Cup in the microwave",
+    scene:
+      "Take a cup, turn on the tap, turn off the tap, open the microwave, insert the cup, and turn on the microwave.",
+    video: "media/example3.mp4",
+    layout: frameLayout(1734, 864, [234, 319, 404, 489, 574]),
+    marks: [
+      { time: 3, action: "take cup", ego: { rank: 5 } },
+      { time: 15, action: "turn-on tap", ego: { rank: 1 } },
+      { time: 21, action: "turn-off tap", ego: { rank: 2 } },
+      { time: 35, action: "open microwave", ego: { rank: 3 } },
+      { time: 39, action: "insert cup", ego: { rank: 1 } },
+      { time: 47, action: "turn-on microwave", ego: { rank: 1 } },
+    ],
   },
 ];
 
